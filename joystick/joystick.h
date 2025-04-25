@@ -6,13 +6,9 @@
 #include "hardware/adc.h"
 
 // Intervalos de leitura do joystick (em milissegundos)
-#define JOYSTICK_READ_INTERVAL 200  // 100 ms para economia de recursos
+#define JOYSTICK_READ_INTERVAL_us 240000 //intervalo em us
 
 //funções
 void setup_joystick();
-void R3_callback (uint gpio, uint32_t events);
-
-//variáveis globais
-volatile extern bool R3_button_pressed;
 
 #endif // JOYSTICK_H

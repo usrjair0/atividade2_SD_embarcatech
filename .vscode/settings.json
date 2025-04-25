@@ -40,6 +40,7 @@
         "display.h": "c",
         "joystick.h": "c",
         "i2c.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stdlib.h": "c"
     }
 }
