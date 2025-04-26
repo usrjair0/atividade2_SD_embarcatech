@@ -22,13 +22,14 @@ const char *gate_names[NUM_PORTS] = {
 
 logicGate current_gate = PORT_AND;
 
-typedef enum
-{
-    PORT_SELECTION,
-    PORT_RUN
-} programState;
-
-programState program_state = PORT_SELECTION;
+void update_display() {
+    clear_display();
+    msg_Display_mult(15, 12, 1, 12, 3, 
+        gate_names[(current_gate - 1 + NUM_PORTS) % NUM_PORTS],
+        gate_names[current_gate],
+        gate_names[(current_gate + 1) % NUM_PORTS]);
+    print_rectangle(2, 22, 120, 12);
+};
 
 int main()
 {
@@ -41,18 +42,10 @@ int main()
     uint adc_y_raw;
     uint bar_y_pos;
     uint prev_pos_y;
-
-    uint pos_y = 12;
-    uint menu_item = 2;
     const uint bar_width = 40;
     const uint adc_max = (1 << 12) - 1;
-    const uint menu_lines = 3;
-    const uint valor_max_posY = menu_lines * pos_y - 2;
-    const uint valor_min_posY = 10;
 
-    pos_y = menu_item * 12;
-    msg_Display_mult(15, 12, 1, 12, 3, gate_names[(current_gate - 2 + NUM_PORTS) % NUM_PORTS], gate_names[(current_gate - 1 + NUM_PORTS) % NUM_PORTS], gate_names[current_gate]);
-    print_rectangle(2, pos_y - 2, 120, 12);
+    update_display();
 
     while (true)
     {
@@ -62,49 +55,18 @@ int main()
             next_joystick_read = delayed_by_us(next_joystick_read, JOYSTICK_READ_INTERVAL_us);
             adc_y_raw = adc_read(); // leitura adc do joystick.
             bar_y_pos = adc_y_raw * bar_width / adc_max;
-            prev_pos_y = pos_y;
 
             // nesse caso o usuário está apontando o joystick para baixo.
             if (bar_y_pos < 4)
-            {
-                menu_item += 1;
-                if (menu_item == 4)
-                {
-                    menu_item--;
-                    current_gate = (current_gate + 1) % NUM_PORTS;
-                    clear_display();
-                    pos_y = menu_item * 12;
-                    msg_Display_mult(15, 12, 1, 12, 3, gate_names[(current_gate - 2 + NUM_PORTS) % NUM_PORTS], gate_names[(current_gate - 1 + NUM_PORTS) % NUM_PORTS], gate_names[current_gate]);
-                    print_rectangle(2, pos_y - 2, 120, 12);
-                }
-                else
-                {
-                    clear_display();
-                    pos_y = menu_item * 12;
-                    msg_Display_mult(15, 12, 1, 12, 3, gate_names[(current_gate - 2 + NUM_PORTS) % NUM_PORTS], gate_names[(current_gate - 1 + NUM_PORTS) % NUM_PORTS], gate_names[current_gate]);
-                    print_rectangle(2, pos_y - 2, 120, 12);
-                };
+            { 
+                current_gate = (current_gate + 1) % NUM_PORTS;
+                update_display();
             };
 
             if (bar_y_pos > 32) // nesse caso o usuário está apontando o joystick para cima.
-            {
-                menu_item -= 1;
-                if (menu_item == 0)
-                {
-                    menu_item++;
-                    current_gate = (current_gate - 1 + NUM_PORTS) % NUM_PORTS;
-                    clear_display();
-                    pos_y = menu_item * 12;
-                    msg_Display_mult(15, 12, 1, 12, 3, gate_names[(current_gate - 2 + NUM_PORTS) % NUM_PORTS], gate_names[(current_gate - 1 + NUM_PORTS) % NUM_PORTS], gate_names[current_gate]);
-                    print_rectangle(2, pos_y - 2, 120, 12);
-                }
-                else
-                {
-                    clear_display();
-                    pos_y = menu_item * 12;
-                    msg_Display_mult(15, 12, 1, 12, 3, gate_names[(current_gate - 2 + NUM_PORTS) % NUM_PORTS], gate_names[(current_gate - 1 + NUM_PORTS) % NUM_PORTS], gate_names[current_gate]);
-                    print_rectangle(2, pos_y - 2, 120, 12);
-                };
+            {    
+                current_gate = (current_gate - 1 + NUM_PORTS) % NUM_PORTS;
+                update_display();
             };
         };
 
@@ -131,11 +93,11 @@ int main()
             break;
 
         case PORT_XOR:
-
+            printf("porta XOR");
             break;
 
         case PORT_XNOR:
-
+            printf("porta XNOR");
             break;
 
         default:
