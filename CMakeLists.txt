@@ -40,6 +40,8 @@ add_executable(tarefa2_jairo
             inc/ssd1306.c
             display/display.c
             joystick/joystick.c
+            buttons/buttons.c
+            led_rgb/led_rgb.c
 )
 
 pico_set_program_name(tarefa2_jairo "tarefa2_jairo")
@@ -59,6 +61,8 @@ target_include_directories(tarefa2_jairo PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/inc
         ${CMAKE_CURRENT_LIST_DIR}/display
         ${CMAKE_CURRENT_LIST_DIR}/joystick
+        ${CMAKE_CURRENT_LIST_DIR}/buttons
+        ${CMAKE_CURRENT_LIST_DIR}/led_rgb
 )
 
 # Add any user requested libraries
@@ -67,6 +71,7 @@ target_link_libraries(tarefa2_jairo
         hardware_adc
         hardware_timer
         hardware_clocks
+        hardware_pwm
         )
 
 pico_add_extra_outputs(tarefa2_jairo)

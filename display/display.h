@@ -11,6 +11,7 @@ void setup_display();
 // Desenha um retângulo no display
 void print_rectangle(int x1, int y1, int x2, int y2);
 
+// função para limpar o display
 void clear_display();
 
 void msg_Display_mult(int x, int y, int tam, int line_spacing, int num_strings, ...);
